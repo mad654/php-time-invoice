@@ -21,9 +21,7 @@ class AtWorkWorkingHourTest extends TestCase
      * @throws FileNotFoundException
      */
     public function fromFile_always_returnsArrayWithCountFive() {
-        $actual = AtWorkWorkingHour::fromFile(__DIR__ . '/fixtures/excel-export-atwork-2018-04-30-10_36_18.csv');
-
-        $this->assertCount(5, $actual);
+        $this->assertCount(5, $this->instanceFromFixtures());
     }
 
     /**
@@ -40,5 +38,15 @@ class AtWorkWorkingHourTest extends TestCase
      */
     protected function instance(): AtWorkWorkingHour {
         return new AtWorkWorkingHour();
+    }
+
+    /**
+     * @return WorkingHour[]
+     * @throws FileNotFoundException
+     */
+    protected function instanceFromFixtures(): array {
+        return AtWorkWorkingHour::fromFile(
+            __DIR__ . '/fixtures/excel-export-atwork-2018-04-30-10_36_18.csv'
+        );
     }
 }
