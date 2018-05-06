@@ -3,7 +3,6 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
-use mad654\TimeInvoice\SimpleWorkingHour;
 use mad654\TimeInvoice\WorkingHour;
 use PHPUnit\Framework\TestCase;
 
