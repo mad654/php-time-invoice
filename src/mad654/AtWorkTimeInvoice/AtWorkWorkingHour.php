@@ -94,6 +94,6 @@ final class AtWorkWorkingHour implements WorkingHour
     }
 
     public function toEuroCent(): int {
-        return 15600;
+        return 0;
     }
 }
