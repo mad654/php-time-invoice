@@ -23,7 +23,16 @@ class InvoiceTest extends TestCase
      * @test
      */
     public function fromWorkingHours_always_printsUsefulDefaults() {
-        $this->assertEquals([], $this->printInvoice([]));
+        $expected = [
+            'invoiceRecipient' => [],
+            'paymentInformation' => [],
+            'rows' => [],
+            'totalEuroCent' => 0,
+            'taxEuroCent'   => 0,
+            'totalInclTaxEuroCent' => 0
+        ];
+
+        $this->assertEquals($expected, $this->printInvoice([]));
     }
 
     private function printInvoice(array $workingHours): array {

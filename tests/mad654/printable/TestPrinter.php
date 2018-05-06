@@ -15,5 +15,7 @@ final class TestPrinter implements Printer
         }
         
         $this->printedValues[$key] = $value;
+
+        return $this;
     }
 }
