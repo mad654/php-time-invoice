@@ -20,8 +20,25 @@ class AtWorkWorkingHourTest extends TestCase
      * @test
      * @throws FileNotFoundException
      */
-    public function fromFile_always_returnsArrayWithCountFive() {
-        $this->assertCount(5, $this->instanceFromFixtures());
+    public function fromFile_fromFixtures_returnsArrayWithFiveWorkingHourObjects() {
+        $actual = $this->instanceFromFixtures();
+
+        $this->assertCount(5, $actual);
+        $this->assertInstanceOf(WorkingHour::class, $actual[0]);
+        $this->assertInstanceOf(WorkingHour::class, $actual[1]);
+        $this->assertInstanceOf(WorkingHour::class, $actual[2]);
+        $this->assertInstanceOf(WorkingHour::class, $actual[3]);
+        $this->assertInstanceOf(WorkingHour::class, $actual[4]);
+    }
+
+    /**
+     * @test
+     * @throws FileNotFoundException
+     */
+    public function fromFile_fromFixtures_firstItemPriceIs15600EuroCent() {
+        $actual = $this->instanceFromFixtures();
+
+        $this->assertSame(15600, $actual[0]->toEuroCent());
     }
 
     /**

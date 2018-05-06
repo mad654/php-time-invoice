@@ -2,7 +2,7 @@ test: build
 	vendor/bin/phpunit -c tests/phpunit.xml
 
 test.watch:
-	watchexec -e php make test
+	watchexec -e php,lock,json make test
 
 build: vendor
 
