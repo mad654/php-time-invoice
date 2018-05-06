@@ -35,6 +35,20 @@ class InvoiceTest extends TestCase
         $this->assertEquals($expected, $this->printInvoice([]));
     }
 
+    /**
+     * @test
+     */
+    public function fromWorkingHours_someWorkingHours_printsTotal3600EuroCent() {
+        $actual = $this->printInvoice([
+            new WorkingHour(50, 3600), // 30 Minuten a 36 €
+            new WorkingHour(25, 3600), // 15 Minuten a 36 €
+            new WorkingHour(25, 3600), // 15 Minuten a 36 €
+            new WorkingHour(100, 0), // 60 Minuten a 0 €
+        ]);
+
+        $this->assertSame(3600, $actual['totalEuroCent']);
+    }
+
     private function printInvoice(array $workingHours): array {
         $invoice = Invoice::fromWorkingHours($workingHours);
 
