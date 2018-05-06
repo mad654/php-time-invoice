@@ -5,17 +5,11 @@ namespace mad654\TimeInvoice;
 
 
 use mad654\printable\Printer;
+use mad654\printable\TestPrinter;
 use PHPUnit\Framework\TestCase;
 
 class InvoiceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function fromWorkingHours_always_createsInstance() {
-        $this->assertInstanceOf(Invoice::class, Invoice::fromWorkingHours([]));
-    }
-
     /**
      * @test
      * @throws \ReflectionException
@@ -24,4 +18,22 @@ class InvoiceTest extends TestCase
         $printer = $this->getMockForAbstractClass(Printer::class);
         $this->assertInstanceOf(Printer::class, Invoice::fromWorkingHours([])->print($printer));
     }
+
+    /**
+     * @test
+     */
+    public function fromWorkingHours_always_printsUsefulDefaults() {
+        $this->assertEquals([], $this->printInvoice([]));
+    }
+
+    private function printInvoice(array $workingHours): array {
+        $invoice = Invoice::fromWorkingHours($workingHours);
+
+        $printer = new TestPrinter();
+        $invoice->print($printer);
+
+        return $printer->printedValues;
+    }
+
+
 }
