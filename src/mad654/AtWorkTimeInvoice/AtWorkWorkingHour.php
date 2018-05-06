@@ -3,7 +3,6 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
-use mad654\TimeInvoice\SimpleWorkingHour;
 use mad654\TimeInvoice\WorkingHour;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -36,15 +35,23 @@ class AtWorkWorkingHour implements WorkingHour
      */
     protected static function parseFile(string $filePath): array {
         $serializer = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
-        $contents = file_get_contents($filePath);
+        $contents = self::loadFile($filePath);
+        return $serializer->deserialize($contents, self::class, 'csv');
+    }
 
-        $splitPos = mb_strpos($contents, 'Gesamt');
+    /**
+     * @param string $filePath
+     * @return bool|string
+     */
+    protected static function loadFile(string $filePath) {
+        $contents = mb_convert_encoding(file_get_contents($filePath), 'UTF-8', 'UTF-16LE');
+        $splitPos = mb_strpos($contents, 'Gesamt', 0, 'UTF-8');
+
         if ($splitPos === false) {
             throw new \RuntimeException("Whoop, whoop there must be `Gesamt` in the input file");
         }
 
-        $contents = mb_substr($contents, 0, $splitPos - 1);
-        return $serializer->deserialize($contents, self::class, 'csv');
+        return mb_substr($contents, 0, $splitPos);
     }
 
     public function add(WorkingHour $hour): void {
