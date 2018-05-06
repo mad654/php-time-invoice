@@ -3,6 +3,7 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
+use mad654\TimeInvoice\SimpleWorkingHour;
 use mad654\TimeInvoice\WorkingHour;
 use PHPUnit\Framework\TestCase;
 
@@ -52,6 +53,40 @@ class AtWorkWorkingHourTest extends TestCase
         ));
 
         $this->assertEquals($expected, $this->instanceFromFixtures()[0]);
+    }
+
+    /**
+     * @test
+     * @throws FileNotFoundException
+     */
+    public function fromFile_fromFixtures_itemsToEuroCentReturnsCorrectValues() {
+        $this->assertSame(15600, $this->instanceFromFixtures()[0]->toEuroCent());
+        $this->assertSame(360, $this->instanceFromFixtures()[1]->toEuroCent());
+        $this->assertSame(23280, $this->instanceFromFixtures()[3]->toEuroCent());
+        $this->assertSame(720, $this->instanceFromFixtures()[4]->toEuroCent());
+    }
+
+    /**
+     * @test
+     * @throws FileNotFoundException
+     */
+    public function fromFile_fromFixturesWithPause_thirdItemToEuroCentReturns16680() {
+        $this->assertSame(16668, $this->instanceFromFixtures()[2]->toEuroCent());
+    }
+
+    /**
+     * @test
+     * @throws FileNotFoundException
+     */
+    public function fromFile_fromFixtures_addAllItemsReturns56628EuroCent() {
+        $actual = new AtWorkWorkingHour();
+        $hours = $this->instanceFromFixtures();
+
+        foreach ($hours as $hour) {
+            $actual->add($hour);
+        }
+
+        $this->assertSame(56628, $actual->toEuroCent());
     }
 
     /**

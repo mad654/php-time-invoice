@@ -3,6 +3,7 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
+use mad654\TimeInvoice\SimpleWorkingHour;
 use mad654\TimeInvoice\WorkingHour;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Serializer;
@@ -26,6 +27,19 @@ final class AtWorkWorkingHour implements WorkingHour
     private $Notiz;
 
     /**
+     * @var SimpleWorkingHour
+     */
+    private $addHelper;
+
+    /**
+     * AtWorkWorkingHour constructor.
+     */
+    public function __construct() {
+
+    }
+
+
+    /**
      * @param string $fileName
      * @return WorkingHour[]
      * @throws FileNotFoundException
@@ -44,7 +58,7 @@ final class AtWorkWorkingHour implements WorkingHour
      * @param string $filePath
      * @return WorkingHour[]
      */
-    protected static function parseFile(string $filePath) {
+    private static function parseFile(string $filePath) {
         $result = [];
         $serializer = new Serializer([], [new CsvEncoder("\t")]);
         $decoded =  $serializer->decode(self::loadFile($filePath), 'csv');
@@ -60,7 +74,7 @@ final class AtWorkWorkingHour implements WorkingHour
      * @param string $filePath
      * @return bool|string
      */
-    protected static function loadFile(string $filePath) {
+    private static function loadFile(string $filePath) {
         $contents = mb_convert_encoding(file_get_contents($filePath), 'UTF-8', 'UTF-16LE');
         $splitPos = mb_strpos($contents, 'Gesamt', 0, 'UTF-8');
 
@@ -90,10 +104,49 @@ final class AtWorkWorkingHour implements WorkingHour
     }
 
     public function add(WorkingHour $hour): void {
-        // TODO: Implement add() method.
+        // @todo mad654 refactor this ???
+        if (is_null($this->addHelper)) {
+            $this->addHelper = new SimpleWorkingHour($this->amountHundredth(), $this->priceEuroCent());
+        }
+
+        $this->addHelper->add($hour);
+
     }
 
     public function toEuroCent(): int {
-        return 0;
+        if (!is_null($this->addHelper)) {
+            return $this->addHelper->toEuroCent();
+        }
+        $price = $this->amountHundredth() / 100 * $this->priceEuroCent();
+        return round($price, 2);
+    }
+
+    /**
+     * @return int
+     */
+    private function priceEuroCent(): int {
+        return $this->Stundensatz * 100;
+    }
+
+    /**
+     * @return float
+     */
+    private function amountHundredth(): float {
+        return $this->diffHundredth() - $this->breakHundredth();
+    }
+
+    /**
+     * @return float
+     */
+    private function diffHundredth(): float {
+        $start = new \DateTime($this->Anfang);
+        $end = new \DateTime($this->Ende);
+        $diff = $end->diff($start);
+
+        return ($diff->h * 60 + $diff->i) / 0.6;
+    }
+
+    private function breakHundredth(): float {
+        return round(floatval(str_replace(',', '.', $this->Pause)) * 100);
     }
 }
