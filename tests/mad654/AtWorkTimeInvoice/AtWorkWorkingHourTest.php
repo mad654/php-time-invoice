@@ -3,6 +3,7 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
+use mad654\TimeInvoice\SimpleWorkingHour;
 use mad654\TimeInvoice\WorkingHour;
 use PHPUnit\Framework\TestCase;
 
@@ -35,10 +36,23 @@ class AtWorkWorkingHourTest extends TestCase
      * @test
      * @throws FileNotFoundException
      */
-    public function fromFile_fromFixtures_firstItemPriceIs15600EuroCent() {
-        $actual = $this->instanceFromFixtures();
+    public function fromFile_fromFixtures_firstItemWasParsedCorrectly() {
+        $expected = AtWorkWorkingHour::fromArray(array(
+            'LfdNummer' => '1',
+            'Anfang' => '2018-04-27 12:17',
+            'Ende' => '2018-04-27 16:37',
+            'Pause' => '0',
+            'Dauer' => '4,333',
+            'Stundensatz' => '36,00',
+            'Zuschlag' => '0,00',
+            'Verdienst' => '156,00',
+            'Kunde' => 'Muster ',
+            'Projekt' => 'GA',
+            'Aufgabe' => 'Fahrzeit',
+            'Notiz' => NULL,
+        ));
 
-        $this->assertSame(15600, $actual[0]->toEuroCent());
+        $this->assertEquals($expected, $this->instanceFromFixtures()[0]);
     }
 
     /**
@@ -61,7 +75,7 @@ class AtWorkWorkingHourTest extends TestCase
      * @return WorkingHour[]
      * @throws FileNotFoundException
      */
-    protected function instanceFromFixtures(): array {
+    protected function instanceFromFixtures() {
         return AtWorkWorkingHour::fromFile(
             __DIR__ . '/fixtures/excel-export-atwork-2018-04-30-10_36_18.csv'
         );

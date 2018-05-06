@@ -11,8 +11,20 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Implements `mad654\TimeInvoice\WorkingHour` for `atWork` ios app exports
  */
-class AtWorkWorkingHour implements WorkingHour
+final class AtWorkWorkingHour implements WorkingHour
 {
+    private $LfdNummer;
+    private $Anfang;
+    private $Ende;
+    private $Pause;
+    private $Dauer;
+    private $Stundensatz;
+    private $Zuschlag;
+    private $Verdienst;
+    private $Kunde;
+    private $Projekt;
+    private $Aufgabe;
+    private $Notiz;
 
     /**
      * @param string $fileName
@@ -33,10 +45,16 @@ class AtWorkWorkingHour implements WorkingHour
      * @param string $filePath
      * @return WorkingHour[]
      */
-    protected static function parseFile(string $filePath): array {
-        $serializer = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
-        $contents = self::loadFile($filePath);
-        return $serializer->deserialize($contents, self::class, 'csv');
+    protected static function parseFile(string $filePath) {
+        $result = [];
+        $serializer = new Serializer([], [new CsvEncoder("\t")]);
+        $decoded =  $serializer->decode(self::loadFile($filePath), 'csv');
+
+        foreach ($decoded as $item) {
+            $result[] = self::fromArray($item);
+        }
+
+        return $result;
     }
 
     /**
@@ -51,7 +69,25 @@ class AtWorkWorkingHour implements WorkingHour
             throw new \RuntimeException("Whoop, whoop there must be `Gesamt` in the input file");
         }
 
-        return mb_substr($contents, 0, $splitPos);
+        // `Einträge` is first line + one char for linefeed
+        $lengthFirstLine = strlen("Einträge") + 1;
+        $cleaned = mb_substr($contents, $lengthFirstLine, $splitPos - $lengthFirstLine);
+        $cleaned = str_replace('#', 'LfdNummer', $cleaned);
+        $cleaned = str_replace(', €', '', $cleaned);
+
+        return $cleaned;
+    }
+
+    public static function fromArray(array $data): self {
+        $instance = new self();
+
+        foreach ($instance as $key => $currentValues) {
+            if (array_key_exists($key, $data)) {
+                $instance->$key = $data[$key];
+            }
+        }
+
+        return $instance;
     }
 
     public function add(WorkingHour $hour): void {
@@ -59,6 +95,6 @@ class AtWorkWorkingHour implements WorkingHour
     }
 
     public function toEuroCent(): int {
-        return 0;
+        return 15600;
     }
 }
