@@ -29,14 +29,14 @@ final class AtWorkWorkingHour implements WorkingHour
     /**
      * @var SimpleWorkingHour
      */
-    private $addHelper;
+    private $addedWorkingHours;
 
     /**
      * @param string $fileName
      * @return WorkingHour[]
      * @throws FileNotFoundException
      */
-    public static function fromFile(string $fileName) {
+    public static function fromFile(string $fileName): array {
         $filePath = realpath($fileName);
 
         if ($filePath === false || !is_file($filePath)) {
@@ -50,7 +50,7 @@ final class AtWorkWorkingHour implements WorkingHour
      * @param string $filePath
      * @return WorkingHour[]
      */
-    private static function parseFile(string $filePath) {
+    private static function parseFile(string $filePath): array {
         $result = [];
         $serializer = new Serializer([], [new CsvEncoder("\t")]);
         $decoded =  $serializer->decode(self::loadFile($filePath), 'csv');
@@ -62,11 +62,7 @@ final class AtWorkWorkingHour implements WorkingHour
         return $result;
     }
 
-    /**
-     * @param string $filePath
-     * @return bool|string
-     */
-    private static function loadFile(string $filePath) {
+    private static function loadFile(string $filePath): string {
         $contents = mb_convert_encoding(file_get_contents($filePath), 'UTF-8', 'UTF-16LE');
         $splitPos = mb_strpos($contents, 'Gesamt', 0, 'UTF-8');
 
@@ -96,40 +92,29 @@ final class AtWorkWorkingHour implements WorkingHour
     }
 
     public function add(WorkingHour $hour): void {
-        // @todo mad654 refactor this ???
-        if (is_null($this->addHelper)) {
-            $this->addHelper = new SimpleWorkingHour($this->amountHundredth(), $this->priceEuroCent());
+        if (is_null($this->addedWorkingHours)) {
+            $this->addedWorkingHours = new SimpleWorkingHour($this->amountHundredth(), $this->priceEuroCent());
         }
 
-        $this->addHelper->add($hour);
-
+        $this->addedWorkingHours->add($hour);
     }
 
     public function toEuroCent(): int {
-        if (!is_null($this->addHelper)) {
-            return $this->addHelper->toEuroCent();
+        if (!is_null($this->addedWorkingHours)) {
+            return $this->addedWorkingHours->toEuroCent();
         }
         $price = $this->amountHundredth() / 100 * $this->priceEuroCent();
         return round($price, 2);
     }
 
-    /**
-     * @return int
-     */
     private function priceEuroCent(): int {
         return $this->Stundensatz * 100;
     }
 
-    /**
-     * @return float
-     */
     private function amountHundredth(): float {
         return $this->diffHundredth() - $this->breakHundredth();
     }
 
-    /**
-     * @return float
-     */
     private function diffHundredth(): float {
         $start = new \DateTime($this->Anfang);
         $end = new \DateTime($this->Ende);
