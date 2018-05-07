@@ -49,6 +49,9 @@ class InvoiceTest extends TestCase
         $this->assertSame(3600, $actual['totalEuroCent']);
     }
 
+    // @todo mad654 verify has rowCount = workingHourCount
+    // @todo mad654 verify first row has parts: position, text, single price, amount, rowTotal
+
     private function printInvoice(array $workingHours): array {
         $invoice = Invoice::fromWorkingHours($workingHours);
 
