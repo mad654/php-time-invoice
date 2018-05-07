@@ -32,14 +32,6 @@ final class AtWorkWorkingHour implements WorkingHour
     private $addHelper;
 
     /**
-     * AtWorkWorkingHour constructor.
-     */
-    public function __construct() {
-
-    }
-
-
-    /**
      * @param string $fileName
      * @return WorkingHour[]
      * @throws FileNotFoundException
