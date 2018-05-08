@@ -3,7 +3,6 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
-use mad654\TimeInvoice\SimpleWorkingHour;
 use mad654\TimeInvoice\WorkingHour;
 use PHPUnit\Framework\TestCase;
 
@@ -97,6 +96,8 @@ class AtWorkWorkingHourTest extends TestCase
     public function fromFile_fileNotExists_throwsException() {
         AtWorkWorkingHour::fromFile('not-existing-file.name');
     }
+
+    // @todo verify print returns expected values
 
     /**
      * @return AtWorkWorkingHour

@@ -2,7 +2,9 @@
 
 namespace mad654\TimeInvoice;
 
-interface WorkingHour
+use mad654\printable\Printable;
+
+interface WorkingHour extends Printable
 {
     public function add(WorkingHour $hour): void;
 

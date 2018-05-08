@@ -3,6 +3,7 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
+use mad654\printable\Printer;
 use mad654\TimeInvoice\SimpleWorkingHour;
 use mad654\TimeInvoice\WorkingHour;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
@@ -125,5 +126,10 @@ final class AtWorkWorkingHour implements WorkingHour
 
     private function breakHundredth(): float {
         return round(floatval(str_replace(',', '.', $this->Pause)) * 100);
+    }
+
+    public function print(Printer $printer): Printer {
+        // TODO: Implement print() method.
+        return $printer;
     }
 }

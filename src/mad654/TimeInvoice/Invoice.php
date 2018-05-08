@@ -4,9 +4,10 @@
 namespace mad654\TimeInvoice;
 
 
+use mad654\printable\Printable;
 use mad654\printable\Printer;
 
-final class Invoice
+final class Invoice implements Printable
 {
     private $invoiceRecipient = [];
     private $paymentInformation = [];

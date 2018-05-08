@@ -4,6 +4,8 @@
 namespace mad654\TimeInvoice;
 
 
+use mad654\printable\Printer;
+
 final class SimpleWorkingHour implements WorkingHour
 {
     private $amountHundredth = 0;
@@ -22,5 +24,15 @@ final class SimpleWorkingHour implements WorkingHour
 
     public function toEuroCent(): int {
         return $this->totalEuroCent;
+    }
+
+    public function print(Printer $printer): Printer {
+        return $printer
+            ->with('pos', 1)
+            ->with('text', 1)
+            ->with('priceEuroCent', 1)
+            ->with('amountHundredth', 1)
+            ->with('rowTotalEuroCent', 1)
+            ;
     }
 }

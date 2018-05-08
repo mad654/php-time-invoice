@@ -63,7 +63,20 @@ class InvoiceTest extends TestCase
         $this->assertCount(4, $actual['rows']);
     }
 
-    // @todo mad654 verify first row has parts: position, text, single price, amount, rowTotal
+    /**
+     * @test
+     * @todo improve assert to check for correct values
+     */
+    public function fromWorkingHours_oneRow_printsRowDetails() {
+        $printedInvoice = $this->printInvoice([new SimpleWorkingHour(50, 3600)]);
+        $actual = $printedInvoice['rows'][0];
+
+        $this->assertArrayHasKey('pos', $actual);
+        $this->assertArrayHasKey('text', $actual);
+        $this->assertArrayHasKey('priceEuroCent', $actual);
+        $this->assertArrayHasKey('amountHundredth', $actual);
+        $this->assertArrayHasKey('rowTotalEuroCent', $actual);
+    }
 
     private function printInvoice(array $workingHours): array {
         $invoice = Invoice::fromWorkingHours($workingHours);
