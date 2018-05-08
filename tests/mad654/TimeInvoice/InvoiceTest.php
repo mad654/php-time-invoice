@@ -65,17 +65,21 @@ class InvoiceTest extends TestCase
 
     /**
      * @test
-     * @todo improve assert to check for correct values
      */
     public function fromWorkingHours_oneRow_printsRowDetails() {
         $printedInvoice = $this->printInvoice([new SimpleWorkingHour(50, 3600)]);
         $actual = $printedInvoice['rows'][0];
 
         $this->assertArrayHasKey('pos', $actual);
+        $this->assertSame(1, $actual['pos']);
         $this->assertArrayHasKey('text', $actual);
+        $this->assertSame('', $actual['text']);
         $this->assertArrayHasKey('priceEuroCent', $actual);
+        $this->assertSame(3600, $actual['priceEuroCent']);
         $this->assertArrayHasKey('amountHundredth', $actual);
+        $this->assertSame(50, $actual['amountHundredth']);
         $this->assertArrayHasKey('rowTotalEuroCent', $actual);
+        $this->assertSame(1800, $actual['rowTotalEuroCent']);
     }
 
     private function printInvoice(array $workingHours): array {

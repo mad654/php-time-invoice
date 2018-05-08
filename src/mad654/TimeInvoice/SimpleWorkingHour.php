@@ -27,12 +27,13 @@ final class SimpleWorkingHour implements WorkingHour
     }
 
     public function print(Printer $printer): Printer {
+        // @todo text and pos should be dynamically
         return $printer
             ->with('pos', 1)
-            ->with('text', 1)
-            ->with('priceEuroCent', 1)
-            ->with('amountHundredth', 1)
-            ->with('rowTotalEuroCent', 1)
+            ->with('text', '')
+            ->with('priceEuroCent', $this->priceEuroCent)
+            ->with('amountHundredth', $this->amountHundredth)
+            ->with('rowTotalEuroCent', $this->toEuroCent())
             ;
     }
 }
