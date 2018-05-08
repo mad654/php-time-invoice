@@ -49,7 +49,20 @@ class InvoiceTest extends TestCase
         $this->assertSame(3600, $actual['totalEuroCent']);
     }
 
-    // @todo mad654 verify has rowCount = workingHourCount
+    /**
+     * @test
+     */
+    public function fromWorkingHours_fourWorkingHours_printsFourRows() {
+        $actual = $this->printInvoice([
+            new SimpleWorkingHour(50, 3600), // 30 Minuten a 36 €
+            new SimpleWorkingHour(25, 3600), // 15 Minuten a 36 €
+            new SimpleWorkingHour(25, 3600), // 15 Minuten a 36 €
+            new SimpleWorkingHour(100, 0), // 60 Minuten a 0 €
+        ]);
+
+        $this->assertCount(4, $actual['rows']);
+    }
+
     // @todo mad654 verify first row has parts: position, text, single price, amount, rowTotal
 
     private function printInvoice(array $workingHours): array {

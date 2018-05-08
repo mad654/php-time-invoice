@@ -17,14 +17,24 @@ final class Invoice
 
     public static function fromWorkingHours(array $workingHours): Invoice {
         $invoice = new self();
+        $invoice->rows = $workingHours;
+        $invoice->totalEuroCent = self::calculateTotal($workingHours)->toEuroCent();
+
+        return $invoice;
+    }
+
+    /**
+     * @param array $workingHours
+     * @return SimpleWorkingHour
+     */
+    protected static function calculateTotal(array $workingHours): SimpleWorkingHour {
         $total = new SimpleWorkingHour(0, 0);
 
         foreach ($workingHours as $hour) {
             $total->add($hour);
         }
 
-        $invoice->totalEuroCent = $total->toEuroCent();
-        return $invoice;
+        return $total;
     }
 
     public function print(Printer $printer): Printer {
