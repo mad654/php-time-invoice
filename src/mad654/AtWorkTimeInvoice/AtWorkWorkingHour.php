@@ -129,7 +129,11 @@ final class AtWorkWorkingHour implements WorkingHour
     }
 
     public function print(Printer $printer): Printer {
-        // TODO: Implement print() method.
-        return $printer;
+        return $printer
+            ->with('text', '')
+            ->with('priceEuroCent', $this->priceEuroCent())
+            ->with('amountHundredth', $this->amountHundredth())
+            ->with('rowTotalEuroCent', $this->toEuroCent())
+            ;
     }
 }

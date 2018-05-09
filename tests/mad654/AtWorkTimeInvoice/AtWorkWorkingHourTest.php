@@ -3,6 +3,7 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
+use mad654\printable\TestPrinter;
 use mad654\TimeInvoice\WorkingHour;
 use PHPUnit\Framework\TestCase;
 
@@ -95,6 +96,23 @@ class AtWorkWorkingHourTest extends TestCase
      */
     public function fromFile_fileNotExists_throwsException() {
         AtWorkWorkingHour::fromFile('not-existing-file.name');
+    }
+
+    /**
+     * @test
+     */
+    public function print_always_printsUsefullDefaults() {
+        $workingHour = new AtWorkWorkingHour();
+        $printer = new TestPrinter();
+        $workingHour->print($printer);
+
+        $actual = $printer->printedValues;
+
+        $this->assertCount(4, $actual);
+        $this->assertSame('', $actual['text']);
+        $this->assertSame(0, $actual['priceEuroCent']);
+        $this->assertSame(0.0, $actual['amountHundredth']);
+        $this->assertSame(0, $actual['rowTotalEuroCent']);
     }
 
     // @todo verify print returns expected values
