@@ -3,6 +3,7 @@
 
 namespace mad654\AtWorkTimeInvoice;
 
+use DateTime;
 use mad654\printable\Printer;
 use mad654\TimeInvoice\SimpleWorkingHour;
 use mad654\TimeInvoice\WorkingHour;
@@ -144,7 +145,18 @@ final class AtWorkWorkingHour implements WorkingHour
      */
     private function renderText(): string {
         if (!empty($this->Kunde) || !empty($this->Projekt) || !empty($this->Aufgabe)) {
-            return vsprintf('%s/%s %s', [$this->Kunde, $this->Projekt, $this->Aufgabe]);
+            $partsBegin = new DateTime($this->Anfang);
+            $partsEnd = new DateTime($this->Ende);
+            $diff = $partsEnd->diff($partsBegin);
+
+            return vsprintf('%s %s bis %s >> %s/%s >> %s', [
+                $partsBegin->format('d.m.Y'),
+                $partsBegin->format('H:i'),
+                $partsEnd->format('H:i'),
+                $this->Kunde,
+                $this->Projekt,
+                $this->Aufgabe
+            ]);
         }
 
         return "";

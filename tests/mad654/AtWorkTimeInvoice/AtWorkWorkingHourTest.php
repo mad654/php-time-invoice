@@ -125,9 +125,8 @@ class AtWorkWorkingHourTest extends TestCase
 
         $actual = $printer->printedValues;
 
-        $this->assertSame('Muster/GA Fahrzeit', $actual['text']);
+        $this->assertSame('27.04.2018 12:17 bis 16:37 >> Muster/GA >> Fahrzeit', $actual['text']);
     }
-    // @todo verify print returns expected values
 
     /**
      * @return AtWorkWorkingHour
