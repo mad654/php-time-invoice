@@ -4,7 +4,7 @@
 
 use mad654\AtWorkTimeInvoice\AtWorkWorkingHour;
 use mad654\printable\TestPrinter;
-use mad654\TimeInvoice\Invoice;
+use mad654\TimeInvoice\TaxFreeInvoice;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -13,7 +13,7 @@ if ($inputfile === false) {
     die($argv[1] . " not found");
 }
 
-$invoice = Invoice::fromWorkingHours(AtWorkWorkingHour::fromFile($inputfile));
+$invoice = TaxFreeInvoice::fromWorkingHours(AtWorkWorkingHour::fromFile($inputfile));
 $printer = new TestPrinter();
 $invoice->print($printer);
 

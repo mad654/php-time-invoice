@@ -16,7 +16,7 @@ class InvoiceTest extends TestCase
      */
     public function print_always_returnsPrinterInstance() {
         $printer = $this->getMockForAbstractClass(Printer::class);
-        $this->assertInstanceOf(Printer::class, Invoice::fromWorkingHours([])->print($printer));
+        $this->assertInstanceOf(Printer::class, TaxFreeInvoice::fromWorkingHours([])->print($printer));
     }
 
     /**
@@ -85,7 +85,7 @@ class InvoiceTest extends TestCase
     }
 
     private function printInvoice(array $workingHours): array {
-        $invoice = Invoice::fromWorkingHours($workingHours);
+        $invoice = TaxFreeInvoice::fromWorkingHours($workingHours);
 
         $printer = new TestPrinter();
         $invoice->print($printer);
