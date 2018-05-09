@@ -47,6 +47,8 @@ class InvoiceTest extends TestCase
         ]);
 
         $this->assertSame(3600, $actual['totalEuroCent']);
+        $this->assertSame(0, $actual['taxEuroCent']);
+        $this->assertSame(3600, $actual['totalInclTaxEuroCent']);
     }
 
     /**

@@ -14,7 +14,6 @@ final class Invoice implements Printable
     private $rows = [];
     private $totalEuroCent = 0;
     private $taxEuroCent = 0;
-    private $totalInclTaxEuroCent = 0;
 
     public static function fromWorkingHours(array $workingHours): Invoice {
         $invoice = new self();
@@ -51,7 +50,7 @@ final class Invoice implements Printable
             ->with('rows', $this->rows)
             ->with('totalEuroCent', $this->totalEuroCent)
             ->with('taxEuroCent', $this->taxEuroCent)
-            ->with('totalInclTaxEuroCent', $this->totalInclTaxEuroCent)
+            ->with('totalInclTaxEuroCent', $this->totalEuroCent + $this->taxEuroCent)
             ;
     }
 }
