@@ -66,18 +66,19 @@ final class AtWorkWorkingHour implements WorkingHour
 
     private static function loadFile(string $filePath): string {
         $contents = mb_convert_encoding(file_get_contents($filePath), 'UTF-8', 'UTF-16LE');
-        $splitPos = mb_strpos($contents, 'Gesamt', 0, 'UTF-8');
+
+        // `Einträge` is first line + one char for linefeed
+        $cleaned = preg_replace('/^.+\n/', '', $contents);
+        $splitPos = mb_strpos($cleaned, 'Gesamt', 0, 'UTF-8');
 
         if ($splitPos === false) {
             throw new \RuntimeException("Whoop, whoop there must be `Gesamt` in the input file");
         }
 
-        // `Einträge` is first line + one char for linefeed
-        $lengthFirstLine = strlen("Einträge") + 1;
-        $cleaned = mb_substr($contents, $lengthFirstLine, $splitPos - $lengthFirstLine);
+        $cleaned = mb_substr($cleaned, 0, $splitPos);
         $cleaned = str_replace('#', 'LfdNummer', $cleaned);
         $cleaned = str_replace(', €', '', $cleaned);
-
+        var_dump($cleaned);
         return $cleaned;
     }
 
