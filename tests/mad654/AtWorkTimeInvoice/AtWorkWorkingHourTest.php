@@ -115,6 +115,18 @@ class AtWorkWorkingHourTest extends TestCase
         $this->assertSame(0, $actual['rowTotalEuroCent']);
     }
 
+    /**
+     * @test
+     */
+    public function print_fromFixtures_rowOneContainsExpectedText() {
+        $hours = $this->instanceFromFixtures();
+        $printer = new TestPrinter();
+        $hours[0]->print($printer);
+
+        $actual = $printer->printedValues;
+
+        $this->assertSame('Muster/GA Fahrzeit', $actual['text']);
+    }
     // @todo verify print returns expected values
 
     /**

@@ -85,7 +85,7 @@ final class AtWorkWorkingHour implements WorkingHour
 
         foreach ($instance as $key => $currentValues) {
             if (array_key_exists($key, $data)) {
-                $instance->$key = $data[$key];
+                $instance->$key = trim($data[$key]);
             }
         }
 
@@ -130,10 +130,23 @@ final class AtWorkWorkingHour implements WorkingHour
 
     public function print(Printer $printer): Printer {
         return $printer
-            ->with('text', '')
+            ->with('text', $this->renderText())
             ->with('priceEuroCent', $this->priceEuroCent())
             ->with('amountHundredth', $this->amountHundredth())
             ->with('rowTotalEuroCent', $this->toEuroCent())
             ;
+    }
+
+    /**
+     * @return string
+     *
+     * // todo mad654 improve logic
+     */
+    private function renderText(): string {
+        if (!empty($this->Kunde) || !empty($this->Projekt) || !empty($this->Aufgabe)) {
+            return vsprintf('%s/%s %s', [$this->Kunde, $this->Projekt, $this->Aufgabe]);
+        }
+
+        return "";
     }
 }
