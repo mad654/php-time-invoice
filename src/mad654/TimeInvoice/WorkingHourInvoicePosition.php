@@ -7,7 +7,7 @@ namespace mad654\TimeInvoice;
 use mad654\printable\Printable;
 use mad654\printable\Printer;
 
-class InvoicePosition implements Printable
+class WorkingHourInvoicePosition implements Printable
 {
     /**
      * @var string

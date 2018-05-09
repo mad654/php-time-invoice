@@ -21,7 +21,7 @@ final class Invoice implements Printable
 
         $counter = 1;
         foreach ($workingHours as $workingHour) {
-            $invoice->rows[] = new InvoicePosition($counter, $workingHour);
+            $invoice->rows[] = new WorkingHourInvoicePosition($counter, $workingHour);
             $counter++;
         }
 
