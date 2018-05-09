@@ -71,7 +71,7 @@ class InvoiceTest extends TestCase
         $actual = $printedInvoice['rows'][0];
 
         $this->assertArrayHasKey('pos', $actual);
-        $this->assertSame(1, $actual['pos']);
+        $this->assertSame('1', $actual['pos']);
         $this->assertArrayHasKey('text', $actual);
         $this->assertSame('', $actual['text']);
         $this->assertArrayHasKey('priceEuroCent', $actual);

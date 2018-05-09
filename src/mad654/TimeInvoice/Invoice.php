@@ -18,7 +18,13 @@ final class Invoice implements Printable
 
     public static function fromWorkingHours(array $workingHours): Invoice {
         $invoice = new self();
-        $invoice->rows = $workingHours;
+
+        $counter = 1;
+        foreach ($workingHours as $workingHour) {
+            $invoice->rows[] = new InvoicePosition($counter, $workingHour);
+            $counter++;
+        }
+
         $invoice->totalEuroCent = self::calculateTotal($workingHours)->toEuroCent();
 
         return $invoice;

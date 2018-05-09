@@ -19,6 +19,29 @@ final class TestPrinter implements Printer
         return $this;
     }
 
+    /**
+     *
+     * Prints given values and merges its key/value pairs
+     * into current structure
+     *
+     * only works for printable or arrays
+     *
+     * @param $value
+     * @return Printer
+     */
+    public function withMerged($value): Printer {
+        if (!is_array($value) && ! $value instanceof Printable) {
+            throw new \RuntimeException("Only arrays and `Printable`s supported here");
+        }
+
+        $value = $this->print($value);
+        foreach ($value as $key => $value) {
+            $this->with($key, $value);
+        }
+
+        return $this;
+    }
+
     private function print($value) {
         if (is_array($value)) {
             foreach ($value as $index => $arrayValue) {
