@@ -78,7 +78,7 @@ final class AtWorkWorkingHour implements WorkingHour
         $cleaned = mb_substr($cleaned, 0, $splitPos);
         $cleaned = str_replace('#', 'LfdNummer', $cleaned);
         $cleaned = str_replace(', €', '', $cleaned);
-        var_dump($cleaned);
+
         return $cleaned;
     }
 
