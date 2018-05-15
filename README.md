@@ -18,10 +18,6 @@ which generates a Invoice to `var/dev.pdf` if any file changed.
 
 ### todos until next merge
 
-- make invoice recipient configurable and remove details from code
-- make payment informations configurable and remove details from code
-- make static entries in @the beginning configurable
-- app.ini should be checked in as app.ini.dist and copied during `make build`
 - refactor SimpleWorkingHour to SimpleProduct
 - how to use section
 - how to extend data source section
