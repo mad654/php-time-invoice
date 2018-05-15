@@ -18,7 +18,6 @@ which generates a Invoice to `var/dev.pdf` if any file changed.
 
 ### todos until next merge
 
-- refactor SimpleWorkingHour to SimpleProduct
 - how to use section
 - how to extend data source section
 - how to customize template section
