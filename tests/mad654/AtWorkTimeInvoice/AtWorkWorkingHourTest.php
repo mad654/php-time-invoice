@@ -52,7 +52,7 @@ class AtWorkWorkingHourTest extends TestCase
             'Notiz' => NULL,
         ));
 
-        $this->assertEquals($expected, $this->instanceFromFixtures()[0]);
+        $this->assertEquals($expected, $this->instanceFromFixtures()[4]);
     }
 
     /**
@@ -60,10 +60,10 @@ class AtWorkWorkingHourTest extends TestCase
      * @throws FileNotFoundException
      */
     public function fromFile_fromFixtures_itemsToEuroCentReturnsCorrectValues() {
-        $this->assertSame(15600, $this->instanceFromFixtures()[0]->toEuroCent());
-        $this->assertSame(360, $this->instanceFromFixtures()[1]->toEuroCent());
-        $this->assertSame(23280, $this->instanceFromFixtures()[3]->toEuroCent());
-        $this->assertSame(720, $this->instanceFromFixtures()[4]->toEuroCent());
+        $this->assertSame(15600, $this->instanceFromFixtures()[4]->toEuroCent());
+        $this->assertSame(360, $this->instanceFromFixtures()[3]->toEuroCent());
+        $this->assertSame(23280, $this->instanceFromFixtures()[1]->toEuroCent());
+        $this->assertSame(720, $this->instanceFromFixtures()[0]->toEuroCent());
     }
 
     /**
@@ -121,11 +121,37 @@ class AtWorkWorkingHourTest extends TestCase
     public function print_fromFixtures_rowOneContainsExpectedText() {
         $hours = $this->instanceFromFixtures();
         $printer = new TestPrinter();
+        $hours[4]->print($printer);
+
+        $actual = $printer->printedValues;
+
+        $this->assertSame("27.04.2018 12:17 bis 16:37 \n Muster/GA >> Fahrzeit", $actual['text']);
+    }
+
+    /**
+     * @test
+     */
+    public function print_fromFixtures_rowWithMissingTask_removedLastSignsFromText() {
+        $hours = $this->instanceFromFixtures();
+        $printer = new TestPrinter();
         $hours[0]->print($printer);
 
         $actual = $printer->printedValues;
 
-        $this->assertSame('27.04.2018 12:17 bis 16:37 >> Muster/GA >> Fahrzeit', $actual['text']);
+        $this->assertSame("13.04.2018 07:47 bis 07:59 \n Muster/GA", $actual['text']);
+    }
+
+    /**
+     * @test
+     */
+    public function print_fromFixtures_rowWithMissingProject_removeSlash() {
+        $hours = $this->instanceFromFixtures();
+        $printer = new TestPrinter();
+        $hours[1]->print($printer);
+
+        $actual = $printer->printedValues;
+
+        $this->assertSame("13.04.2018 08:14 bis 14:42 \n Muster >> Meeting  Kunde inclusive Vorbereitung", $actual['text']);
     }
 
     /**

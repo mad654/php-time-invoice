@@ -9,14 +9,54 @@ use mad654\printable\Printer;
 
 final class TaxFreeInvoice implements Printable, Invoice
 {
-    private $invoiceRecipient = [];
-    private $paymentInformation = [];
+
+    /**
+     * @var InvoiceNumber
+     */
+    private $number;
+
+    /**
+     * @var InvoiceAddress
+     */
+    private $creator;
+
+    /**
+     * @var InvoiceAddress
+     */
+    private $recipient;
+
+    /**
+     * @var InvoiceAddress
+     */
+    private $bankAccount;
+
+    /**
+     * @var WorkingHour[]
+     */
     private $rows = [];
+
+    /**
+     * @var int
+     */
     private $totalEuroCent = 0;
+
+    /**
+     * @var int
+     */
     private $taxEuroCent = 0;
 
-    public static function fromWorkingHours(array $workingHours): Invoice {
+    public static function fromWorkingHours(
+        array $workingHours,
+        InvoiceNumber $number,
+        InvoiceAddress $creator,
+        InvoiceBankAccount $account,
+        InvoiceAddress $recipient
+    ): Invoice {
         $invoice = new self();
+        $invoice->number = $number;
+        $invoice->bankAccount = $account;
+        $invoice->creator = $creator;
+        $invoice->recipient = $recipient;
 
         $counter = 1;
         foreach ($workingHours as $workingHour) {
@@ -48,8 +88,10 @@ final class TaxFreeInvoice implements Printable, Invoice
 
     public function print(Printer $printer): Printer {
         return $printer
-            ->with('invoiceRecipient', $this->invoiceRecipient)
-            ->with('paymentInformation', $this->paymentInformation)
+            ->withMerged($this->number)  // @todo mad654: refactor this
+            ->with('creator', $this->creator)
+            ->with('invoiceRecipient', $this->recipient)
+            ->with('paymentInformation', $this->bankAccount)
             ->with('rows', $this->rows)
             ->with('totalEuroCent', $this->totalEuroCent)
             ->with('taxEuroCent', $this->taxEuroCent)

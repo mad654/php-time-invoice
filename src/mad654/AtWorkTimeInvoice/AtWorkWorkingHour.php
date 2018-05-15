@@ -61,7 +61,7 @@ final class AtWorkWorkingHour implements WorkingHour
             $result[] = self::fromArray($item);
         }
 
-        return $result;
+        return array_reverse($result, false);
     }
 
     private static function loadFile(string $filePath): string {
@@ -141,25 +141,51 @@ final class AtWorkWorkingHour implements WorkingHour
 
     /**
      * @return string
-     *
-     * // todo mad654 improve logic
      */
     private function renderText(): string {
-        if (!empty($this->Kunde) || !empty($this->Projekt) || !empty($this->Aufgabe)) {
+        if (!empty($this->Kunde) || !empty($this->Projekt)) {
             $partsBegin = new DateTime($this->Anfang);
             $partsEnd = new DateTime($this->Ende);
-            $diff = $partsEnd->diff($partsBegin);
 
-            return vsprintf('%s %s bis %s >> %s/%s >> %s', [
-                $partsBegin->format('d.m.Y'),
-                $partsBegin->format('H:i'),
-                $partsEnd->format('H:i'),
-                $this->Kunde,
-                $this->Projekt,
-                $this->Aufgabe
-            ]);
+            $result = $this->renderWithProject($partsBegin, $partsEnd);
+            if (empty($this->Projekt)) {
+                $result = $this->renderWithoutProject($partsBegin, $partsEnd);
+            }
+            if (!empty($this->Aufgabe)) {
+                $result = vsprintf('%s >> %s', [$result, $this->Aufgabe]);
+            }
+
+            return $result;
         }
 
         return "";
+    }
+
+    /**
+     * @param $partsBegin
+     * @param $partsEnd
+     * @return string
+     */
+    private function renderWithProject($partsBegin, $partsEnd): string {
+        return vsprintf(
+            "%s %s bis %s \n %s/%s", [
+            $partsBegin->format('d.m.Y'),
+            $partsBegin->format('H:i'),
+            $partsEnd->format('H:i'),
+            $this->Kunde,
+            $this->Projekt
+        ]
+        );
+    }
+
+    private function renderWithoutProject($partsBegin, $partsEnd): string {
+        return vsprintf(
+            "%s %s bis %s \n %s", [
+                $partsBegin->format('d.m.Y'),
+                $partsBegin->format('H:i'),
+                $partsEnd->format('H:i'),
+                $this->Kunde
+            ]
+        );
     }
 }

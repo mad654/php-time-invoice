@@ -8,7 +8,7 @@ use mad654\printable\Printer;
 use mad654\printable\TestPrinter;
 use PHPUnit\Framework\TestCase;
 
-class InvoiceTest extends TestCase
+class TaxFreeInvoiceTest extends TestCase
 {
     /**
      * @test
@@ -16,7 +16,14 @@ class InvoiceTest extends TestCase
      */
     public function print_always_returnsPrinterInstance() {
         $printer = $this->getMockForAbstractClass(Printer::class);
-        $this->assertInstanceOf(Printer::class, TaxFreeInvoice::fromWorkingHours([])->print($printer));
+        $actual = TaxFreeInvoice::fromWorkingHours(
+            [],
+            new SimpleDateInvoiceNumber(),
+            new SimpleInvoiceAddress('','','',''),
+            new PaymentSettings('','','','',''),
+            new SimpleInvoiceAddress('','','','')
+        );
+        $this->assertInstanceOf(Printer::class, $actual->print($printer));
     }
 
     /**
@@ -24,15 +31,35 @@ class InvoiceTest extends TestCase
      */
     public function fromWorkingHours_always_printsUsefulDefaults() {
         $expected = [
-            'invoiceRecipient' => [],
-            'paymentInformation' => [],
+            'paymentInformation' => [
+                'dueDateText' => '',
+                'accountOwner' => '',
+                'bank' => '',
+                'iban' => '',
+                'bic' => '',
+                'purposeOfPayment' => '',
+            ],
+            'creator' => [
+                'name' => '',
+                'address' => '',
+                'zip' => '',
+                'city' => '',
+            ],
+            'invoiceRecipient' => [
+                'name' => '',
+                'address' => '',
+                'zip' => '',
+                'city' => '',
+            ],
             'rows' => [],
             'totalEuroCent' => 0,
             'taxEuroCent'   => 0,
             'totalInclTaxEuroCent' => 0
         ];
 
-        $this->assertEquals($expected, $this->printInvoice([]));
+        $actual = $this->printInvoice([]);
+        $this->assertArraySubset($expected, $actual);
+        $this->assertNotEmpty($actual['number']);
     }
 
     /**
@@ -85,7 +112,13 @@ class InvoiceTest extends TestCase
     }
 
     private function printInvoice(array $workingHours): array {
-        $invoice = TaxFreeInvoice::fromWorkingHours($workingHours);
+        $invoice = TaxFreeInvoice::fromWorkingHours(
+            $workingHours,
+            new SimpleDateInvoiceNumber(),
+            new SimpleInvoiceAddress('','','',''),
+            new PaymentSettings('','','','',''),
+            new SimpleInvoiceAddress('','','','')
+        );
 
         $printer = new TestPrinter();
         $invoice->print($printer);
