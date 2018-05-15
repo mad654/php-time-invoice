@@ -1,6 +1,7 @@
 vendor/
 __dist/
-
+var/
+etc/app.ini
 
 # Created by https://www.gitignore.io/api/phpstorm
 
