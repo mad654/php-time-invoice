@@ -1,6 +1,6 @@
 # php-time-invoice
 
-Generate pdf german tax free invoice from [atWork](https://itunes.apple.com/de/app/atwork-zeiterfassung-stechuhr/id857189697?mt=8) csv exports with php.
+Generate german tax free pdf invoice from [atWork](https://itunes.apple.com/de/app/atwork-zeiterfassung-stechuhr/id857189697?mt=8) csv exports with php.
 
 ## getting started
 
