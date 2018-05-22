@@ -2,6 +2,7 @@ vendor/
 __dist/
 var/
 etc/app.ini
+etc/invoice_template.php
 
 # Created by https://www.gitignore.io/api/phpstorm
 
