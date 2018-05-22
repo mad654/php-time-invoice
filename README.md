@@ -14,7 +14,7 @@ PDF during development you can simply call:
 
 `make dev.pdf.watch` 
 
-which generates a Invoice to `var/dev.pdf` if any file changed.
+which generates an invoice to `var/dev.pdf` if any file changed.
 
 ### todos until next merge
 
