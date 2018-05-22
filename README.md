@@ -40,14 +40,15 @@ be already done during `make build`.
 The invoice template is located in `etc/invoice_template.php`. You can change it according
 your needs. The default template is located `etc/invoice_template.php.dist`.
 
+The template has access to `$data`. You can dump it to command line with 
+`bin/atWorkInvoiceDumper.php [<atWork_input.csv>]`.
+
 If you want to see the results directly in the generated
 PDF during development you can simply call: 
 
 `make dev.pdf.watch` 
 
 which generates an invoice to `var/dev.pdf` if any file changed.
-
-TODO: how to dump available variables
 
 
 ## development
