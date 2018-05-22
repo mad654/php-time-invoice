@@ -16,7 +16,7 @@ make build
 
 ### Example usage
 
-Takes [`mad654/AtWorkTimeInvoice/fixtures/excel-export-atwork-2018-04-30-10_36_18.csv`](mad654/AtWorkTimeInvoice/fixtures/excel-export-atwork-2018-04-30-10_36_18.csv) as
+Takes [`tests/mad654/AtWorkTimeInvoice/fixtures/excel-export-atwork-2018-04-30-10_36_18.csv`](tests/mad654/AtWorkTimeInvoice/fixtures/excel-export-atwork-2018-04-30-10_36_18.csv) as
 input and generates invoice to `var/dev.pdf`:
 
 ```
