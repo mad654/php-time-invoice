@@ -56,7 +56,12 @@ which generates an invoice to `var/dev.pdf` if any file changed.
 - Run tests: `make test`
 - Watch tests: `make test.watch`
 
-TODO: how to extend data source section
+### How to add a new data source for time records
+
+1. add a new implementation of [`mad654\TimeInvoice\WorkingHour`](mad654/TimeInvoice/WorkingHour.php)
+2. use this class in [`bin/atWorkInvoiceDumper.php`](bin/atWorkInvoiceDumper.php) and 
+   [`bin/time-invoice.php`](bin/time-invoice.ph) instead of 
+   [`mad654\AtWorkTimeInvoice`](mad654/AtWorkTimeInvoice/AtWorkWorkingHour.php)
 
 
 
