@@ -1,6 +1,6 @@
-# time-invoice
+# php-time-invoice
 
-Invoice time based services
+Generate pdf invoice from [atWork](https://itunes.apple.com/de/app/atwork-zeiterfassung-stechuhr/id857189697?mt=8) csv exports with php.
 
 ## getting started
 
