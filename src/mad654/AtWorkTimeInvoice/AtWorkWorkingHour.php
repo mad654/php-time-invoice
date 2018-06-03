@@ -91,6 +91,8 @@ final class AtWorkWorkingHour implements WorkingHour
             }
         }
 
+        $instance->Stundensatz = str_replace(",", ".", $instance->Stundensatz);
+
         return $instance;
     }
 
